@@ -1,16 +1,51 @@
-cmake_minimum_required(VERSION 3.24)
-project(VkPhysDemo
-    VERSION 1.0.0 
-    LANGUAGES C CXX)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-add_executable(phys_demo 
-    src/main.cpp 
+file(GLOB_RECURSE ENGINE_SOURCES CONFIGURE_DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
 )
 
-target_include_directories(phys_demo PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}
+set(ENGINE_LIB_TYPE STATIC)
+if(ENGINE_BUILD_SHARED)
+    set(ENGINE_LIB_TYPE SHARED)
+endif()
+
+add_library(engine ${ENGINE_LIB_TYPE} ${ENGINE_SOURCES})
+
+file(GLOB_RECURSE ENGINE_SRC_SUBDIRS LIST_DIRECTORIES true CONFIGURE_DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*
+)
+set(ENGINE_PRIVATE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src)
+foreach(DIR ${ENGINE_SRC_SUBDIRS})
+    if(IS_DIRECTORY ${DIR})
+        list(APPEND ENGINE_PRIVATE_INCLUDE_DIRS ${DIR})
+    endif()
+endforeach()
+
+target_include_directories(engine
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    PRIVATE
+        ${ENGINE_PRIVATE_INCLUDE_DIRS})
+
+target_link_libraries(engine
+    PUBLIC
+        Vulkan::Vulkan
+        volk
+        GPUOpen::VulkanMemoryAllocator
+        glm::glm
+        glfw
+    PRIVATE
+        imgui
+        stb
+        assimp
+        meshoptimizer
+        Jolt
+)
+
+if(ENGINE_ENABLE_TRACY)
+    target_link_libraries(engine PUBLIC Tracy::TracyClient)
+    target_compile_definitions(engine PUBLIC TRACY_ENABLE)
+endif()
+
+target_compile_definitions(engine PUBLIC
+    GLFW_INCLUDE_NONE
 )
