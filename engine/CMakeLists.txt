@@ -20,12 +20,25 @@ foreach(DIR ${ENGINE_SRC_SUBDIRS})
     endif()
 endforeach()
 
-target_include_directories(engine
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-    PRIVATE
-        ${ENGINE_PRIVATE_INCLUDE_DIRS})
+target_include_directories(engine PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+file(GLOB_RECURSE ENGINE_INTERNAL_INCLUDE_SUBDIRS
+    LIST_DIRECTORIES true CONFIGURE_DEPENDS
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/engine/*
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*
+)
 
+set(ENGINE_PRIVATE_INCLUDE_DIRS "")
+foreach(DIR ${ENGINE_INTERNAL_INCLUDE_SUBDIRS})
+    if(IS_DIRECTORY ${DIR})
+        list(APPEND ENGINE_PRIVATE_INCLUDE_DIRS ${DIR})
+    endif()
+endforeach()
+
+target_include_directories(engine PRIVATE
+    ${ENGINE_PRIVATE_INCLUDE_DIRS}
+)
 target_link_libraries(engine
     PUBLIC
         Vulkan::Vulkan

@@ -1,7 +1,7 @@
 #include "rdevice.hpp"
 
 RDevice::RDevice(GLFWwindow* w){
-    if (volk_initialize()!=VK_SUCCESS){
+    if (volkInitialize()!=VK_SUCCESS){
         // TODO throw
         return;
     }
@@ -15,7 +15,7 @@ RDevice::RDevice(GLFWwindow* w){
     iApp.apiVersion = VK_API_VERSION_1_3;
 
     VkInstanceCreateInfo iCreate{};
-    iCreate.sType = sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    iCreate.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     iCreate.pApplicationInfo = &iApp;
 
     uint32_t glfwExN = 0;
@@ -36,10 +36,7 @@ RDevice::RDevice(GLFWwindow* w){
         // TODO: throw
         return;
     }
-    if(volkLoadInstance() != VK_SUCCESS){
-        // TODO: throw
-        return;
-    }
+    volkLoadInstance(_instance);
 
     // DEBUGGER
 

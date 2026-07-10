@@ -101,4 +101,4 @@ target_compile_definitions(imgui PUBLIC IMGUI_IMPL_VULKAN_NO_PROTOTYPES)
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/stb)
 
-find_package(Vulkan REQUIRED COMPONENTS shaderc_combined glslang SPIRV-Tools)
+find_package(Vulkan REQUIRED)
