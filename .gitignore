@@ -11,6 +11,13 @@
 # Roslyn cache directories
 *.ide/
 
+
+compile_commands.json
+.deps/
+.libs/
+.cache/
+deps-cache/
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
