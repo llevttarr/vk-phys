@@ -11,6 +11,12 @@
 # Roslyn cache directories
 *.ide/
 
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
 
 compile_commands.json
 .deps/
