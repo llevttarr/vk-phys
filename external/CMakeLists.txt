@@ -63,6 +63,16 @@ set(TARGET_SAMPLES OFF CACHE BOOL "" FORCE)
 set(TARGET_VIEWER OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(joltphysics)
 
+# -     ENTT    -
+FetchContent_Declare(
+    entt
+    GIT_REPOSITORY https://github.com/skypjack/entt.git
+    GIT_TAG v3.16.0
+)
+set(ENTT_BUILD_TESTING OFF CACHE INTERNAL "")
+set(ENTT_BUILD_DOCS OFF CACHE INTERNAL "")
+FetchContent_MakeAvailable(entt)
+
 # -     TRACY    -
 if(ENGINE_ENABLE_TRACY)
     FetchContent_Declare(tracy
@@ -98,8 +108,12 @@ target_include_directories(imgui PUBLIC
 target_link_libraries(imgui PUBLIC glfw Vulkan::Vulkan)
 target_compile_definitions(imgui PUBLIC IMGUI_IMPL_VULKAN_NO_PROTOTYPES) 
 
+# STB (image/write)
+
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/stb)
+
+# miniaudio
 
 add_library(miniaudio INTERFACE)
 target_include_directories(miniaudio INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/miniaudio)

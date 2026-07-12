@@ -52,6 +52,7 @@ target_link_libraries(engine
         assimp
         meshoptimizer
         Jolt
+        EnTT::EnTT
 )
 
 if(ENGINE_ENABLE_TRACY)
