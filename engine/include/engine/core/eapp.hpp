@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <memory>
-#include <optional>
+#include <stdexcept>
 
 #include "window.hpp"
 
@@ -18,11 +18,14 @@ public:
         static App instance;
         return instance;
     }
-    std::optional<Window&> getCurrWindow(){ 
-        if (currWindowI >= windows.size()){
-            return std::nullopt;
+    /*Window& getCurrWindow(){ 
+        if (currWindowIdx >= windows.size()){
+            throw std::runtime_error("invalid currWindowIdx");
         }
-        return windows[currWindowI];
+        return windows[currWindowIdx];
+    }*/
+    void addWindow(Window&& w){
+        windows.push_back(w);
     }
     bool run();
 private:
@@ -30,8 +33,8 @@ private:
     ~App(){destroy();}
     void init();
     void destroy();
-    std::vector<Window&> windows;
-    int8_t currWindowI;
+    std::vector<Window> windows;
+    // int8_t currWindowIdx;
 };
 
 #endif // EAPP_HPP
